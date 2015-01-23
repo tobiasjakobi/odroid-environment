@@ -1,0 +1,119 @@
+function rarch_remote {
+  local host="localhost"
+  local port="55355"
+
+  if [ $(pgrep -c retroarch) -eq 0 ]; then
+    return
+  fi
+
+  echo "${1}" | nc -q 1 -u "${host}" "${port}"
+}
+
+function rarch_backup_saves {
+  local host="tjakobi@ssh2.math.uni-bielefeld.de"
+  local backup_dst="/vol/tmp/tjakobi/rarch"
+  local backup_src="${HOME}/emulation/libretro"
+
+  local backup_name="saves-$(date --utc +'%s').tar.xz"
+
+  tar -c -f - -C "${backup_src}" saves  | xz -z -8 -c | ssh "${host}" "cat > ${backup_dst}/${backup_name}"
+}
+
+function rarch_config_audio {
+  local onboard_conf="${HOME}/emulation/libretro/audio-onboard.conf"
+  local usb_conf="${HOME}/emulation/libretro/audio-usb.conf"
+  local libretro_conf="${HOME}/emulation/libretro/audio.conf"
+
+  if [ -e /proc/asound/AureonUSB ]; then
+    ln -sf "${usb_conf}" "${libretro_conf}"
+  else
+    ln -sf "${onboard_conf}" "${libretro_conf}"
+  fi
+}
+
+function rarch_config_input {
+  local libretro_conf="${HOME}/emulation/libretro/input.conf"
+  local gamepad_dev="/dev/input/by-id/usb-Logitech_Logitech_RumblePad_2_USB-event-joystick"
+  local input_type="single"
+
+  if [ -e "${gamepad_dev}" ]; then
+    local realdev=$(readlink -f "${gamepad_dev}")
+    local sysfs=${realdev/'dev'/'sys/class'}
+
+    local count=0
+    local product=$(cat ${sysfs}/device/id/product)
+    local vendor=$(cat ${sysfs}/device/id/vendor)
+
+    for arg in /sys/class/input/event[0-9]*; do
+      local prod=$(cat $arg/device/id/product)
+      local ven=$(cat $arg/device/id/vendor)
+  
+      if [[ $prod = $product ]] && [[ $ven = $vendor ]]; then
+        ((count++))
+      fi
+    done
+
+    if [ $count -ge 2 ]; then
+      input_type="multi"
+    fi
+  fi
+
+  ln -sf "${HOME}/emulation/libretro/input-${input_type}.conf" "${libretro_conf}"
+}
+
+function rarch_check_gamepad {
+  local gamepad_dev="/dev/input/by-id/usb-Logitech_Logitech_RumblePad_2_USB-event-joystick"
+
+  if [ ! -e "${gamepad_dev}" ]; then
+    echo "error: gamepad device not connected"
+    return 1
+  fi
+}
+
+function rarch_select_content {
+  local snes_rom_path="${HOME}/emulation/snes/roms"
+  local snes_def_rom="The Legend of Zelda - A Link to the Past (US).sfc"
+  local psx_iso_path="${HOME}/emulation/psx/cdimages"
+  local psx_def_iso="Lunar.II.Eternal.Blue.Complete.US.NTSC.Disc1.bin"
+
+  case "${1}" in
+    "psx" )  echo "${psx_iso_path}/${psx_def_iso}" ;;
+    "snes" ) echo "${snes_rom_path}/${snes_def_rom}" ;;
+  esac
+}
+
+function retroarch {
+  local binary="${HOME}/local/bin/retroarch"
+  local dtach_session="/tmp/retroarch.session"
+  local core_config
+
+  if [ -e "${dtach_session}" ]; then
+    return
+  fi
+
+  if [ ! -e "${binary}" ]; then
+    echo "error: retroarch binary not found"
+    return 1
+  fi
+
+  case "${1}" in
+    "psx" )  core_config="${HOME}/local/pcsx.libretro" ;;
+    "snes" ) core_config="${HOME}/local/snes9x.libretro" ;;
+    * )      echo "error: unknown core selected"
+             return 2 ;;
+  esac
+
+  shift 1
+
+  LD_LIBRARY_PATH=$HOME/local/lib dtach -n "${dtach_session}" "${binary}" -c "${core_config}" "$@"
+}
+
+function rarch_attach {
+  local dtach_session="/tmp/retroarch.session"
+
+  if [ ! -e "${dtach_session}" ]; then
+    return
+  fi
+
+  dtach -a "${dtach_session}"
+}

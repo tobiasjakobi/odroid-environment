@@ -1,0 +1,24 @@
+## RetroArch config for desmume
+
+#### Main
+#include "/home/liquid/emulation/libretro/main.conf"
+
+libretro_path = "/home/liquid/local/lib/retro/desmume.so"
+core_options_path = "/home/liquid/emulation/libretro/desmume.environment"
+rgui_browser_directory = "/home/liquid/emulation/nds"
+
+#### Video
+#include "/home/liquid/emulation/libretro/video.conf"
+
+#### Audio
+#include "/home/liquid/emulation/libretro/audio.conf"
+
+### The native NDS sample rate is 44.1kHz
+### Don't apply any resampling at all
+audio_out_rate = 44100
+
+#### Input
+#include "/home/liquid/emulation/libretro/input.conf"
+
+#### Misc
+#include "/home/liquid/emulation/libretro/misc.conf"

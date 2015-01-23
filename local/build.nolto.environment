@@ -1,0 +1,6 @@
+export OPTFLAGS="-march=armv7-a -mcpu=cortex-a9 -mfpu=neon -mfloat-abi=hard"
+export CFLAGS="-O2 -pipe ${OPTFLAGS} -I$HOME/local/include -L$HOME/local/lib"
+export CXXFLAGS="${CFLAGS}"
+export LDFLAGS="-Wl,--as-needed,-O1 -L$HOME/local/lib"
+export LD_LIBRARY_PATH="$HOME/local/lib"
+export PKG_CONFIG_PATH="$HOME/local/lib/pkgconfig"

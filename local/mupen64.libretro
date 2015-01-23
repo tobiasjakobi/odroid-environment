@@ -1,0 +1,26 @@
+## RetroArch config for mupen64-plus
+
+## Warning: This doesn't work with the lima video driver!
+
+#### Main
+#include "/home/liquid/emulation/libretro/main.conf"
+
+libretro_path = "/home/liquid/local/lib/retro/mupen64-plus.so"
+core_options_path = "/home/liquid/emulation/libretro/mupen64-plus.environment"
+rgui_browser_directory = "/home/liquid/emulation/n64"
+
+#### Video
+#include "/home/liquid/emulation/libretro/video.conf"
+
+#### Audio
+#include "/home/liquid/emulation/libretro/audio.conf"
+
+### The native N64 sample rate is 44.1kHz
+### Don't apply any resampling at all
+audio_out_rate = 44100
+
+#### Input
+#include "/home/liquid/emulation/libretro/input.conf"
+
+#### Misc
+#include "/home/liquid/emulation/libretro/misc.conf"

@@ -1,0 +1,24 @@
+## RetroArch config for snes9x
+
+#### Main
+#include "/home/liquid/emulation/libretro/main.conf"
+
+libretro_path = "/home/liquid/local/lib/retro/snes9x-next.so"
+core_options_path = "/home/liquid/emulation/libretro/snes9x.environment"
+rgui_browser_directory = "/home/liquid/emulation/snes"
+
+#### Video
+#include "/home/liquid/emulation/libretro/video.conf"
+
+#### Audio
+#include "/home/liquid/emulation/libretro/audio.conf"
+
+### The native SNES sample rate is roughly 32040.5Hz
+### Since 32kHz isn't supported on most devices, upsample to 48kHz
+audio_out_rate = 48000
+
+#### Input
+#include "/home/liquid/emulation/libretro/input.conf"
+
+#### Misc
+#include "/home/liquid/emulation/libretro/misc.conf"

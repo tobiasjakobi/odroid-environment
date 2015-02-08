@@ -72,7 +72,7 @@ function rarch_check_gamepad {
 
 function rarch_select_content {
   local snes_rom_path="${HOME}/emulation/snes/roms"
-  local snes_def_rom="The Legend of Zelda - A Link to the Past (US).sfc"
+  local snes_def_rom="Donkey Kong Country 2 - Diddy's Kong Quest (U).sfc"
   local psx_iso_path="${HOME}/emulation/psx/cdimages"
   local psx_def_iso="Lunar.II.Eternal.Blue.Complete.US.NTSC.Disc1.bin"
 

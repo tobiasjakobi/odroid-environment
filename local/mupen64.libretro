@@ -1,6 +1,6 @@
 ## RetroArch config for mupen64-plus
 
-## Warning: This doesn't work with the lima video driver!
+## Warning: This doesn't work with the exynos video backend!
 
 #### Main
 #include "/home/liquid/emulation/libretro/main.conf"

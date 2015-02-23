@@ -22,6 +22,18 @@ function pwk {
   curl -s "${1}" | git am
 }
 
+function sensors {
+  local node="/sys/class/thermal/thermal_zone0"
+
+  if [ -e $node ]; then
+    local type=$(cat $node/type)
+    local temp=$(cat $node/temp)
+    local degree=$(echo "scale=2; ${temp} / 1000" | bc)
+
+    echo "${type}: ${degree} degree (celsius)"
+  fi
+}
+
 function kmake {
   local numthreads=5
   local loadaddr=0x40008000

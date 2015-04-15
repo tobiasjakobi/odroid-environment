@@ -18,17 +18,12 @@ source $HOME/.bashrc.extern
 
 echo -n 1 > /var/state/login
 
-# XDG setup for wayland/weston
-if [ -z "${XDG_RUNTIME_DIR}" ]; then
-  export XDG_RUNTIME_DIR=/tmp/${UID}-runtime-dir
-  if [ ! -d "${XDG_RUNTIME_DIR}" ]; then
-    mkdir "${XDG_RUNTIME_DIR}"
-    chmod 0700 "${XDG_RUNTIME_DIR}"
-  fi
-fi
-
 function pwk {
   curl -s "${1}" | git am
+}
+
+function weston-kill {
+  pkill -x weston
 }
 
 function sensors {
@@ -62,7 +57,7 @@ function exynos_rtest {
   local raconf
   local racontent
 
-  if [ "${psx}" -eq 1 ]; then
+  if [ "${psx:-0}" -eq 1 ]; then
     raconf="${HOME}/local/pcsx.libretro"
     racontent="${HOME}/emulation/psx/cdimages/Silent.Hill.US.NTSC.iso"
   else
@@ -70,7 +65,7 @@ function exynos_rtest {
     racontent="${HOME}/emulation/snes/roms/Seiken Densetsu 3 (English) (Translated).sfc"
   fi
 
-  if [ "${gdb}" -eq 1 ]; then
+  if [ "${gdb:-0}" -eq 1 ]; then
     LD_LIBRARY_PATH=$libpath gdb --args "${execf}" -v -c "${raconf}" "${racontent}"
   else
     LD_LIBRARY_PATH=$libpath "${execf}" -v -c "${raconf}" "${racontent}"

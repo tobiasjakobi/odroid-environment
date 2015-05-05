@@ -50,6 +50,18 @@ function kmake {
     make LOADADDR=$loadaddr uImage
 }
 
+function exynos_vptest {
+  local binpath="${HOME}/sourcecode/video/drm/tests/modetest/modetest"
+
+  $binpath -M exynos -s 23@21:1920x1080@AR24 -P 21:640x480+128+128@NV12 -P 21:640x480+1024+128@RG16
+}
+
+function exynos_drmtest {
+  local binpath="${HOME}/sourcecode/video/drm/tests/modetest/modetest"
+
+  $binpath -M exynos -s 23@21:1920x1080@XR24 -P 21:640x480+1024+128@RG16
+}
+
 function exynos_rtest {
   local execf="${HOME}/sourcecode/emu/rarch/RetroArch/retroarch"
   #local libpath="${HOME}/local/lib"

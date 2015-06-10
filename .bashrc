@@ -40,14 +40,12 @@ function sensors {
 
 function kmake {
   local numthreads=5
-  local loadaddr=0x40008000
 
   if [ -n "${1}" ]; then
     make "${1}"
   fi
 
-  make -j $numthreads && \
-    make LOADADDR=$loadaddr uImage
+  make -j $numthreads
 }
 
 function exynos_vptest {
@@ -63,7 +61,8 @@ function exynos_drmtest {
 }
 
 function exynos_rtest {
-  local execf="${HOME}/sourcecode/emu/rarch/RetroArch/retroarch"
+  #local execf="${HOME}/sourcecode/emu/rarch/RetroArch/retroarch"
+  local execf="${HOME}/local/bin/retroarch"
   #local libpath="${HOME}/local/lib"
   local libpath=$HOME/sourcecode/video/drm/exynos/.libs:$HOME/local/lib
   local raconf

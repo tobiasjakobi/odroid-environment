@@ -11,7 +11,7 @@ function rarch_remote {
 
 function rarch_backup_saves {
   local host="tjakobi@ssh2.math.uni-bielefeld.de"
-  local backup_dst="/vol/tmp/tjakobi/rarch"
+  local backup_dst="/vol/data/tjakobi/rarch"
   local backup_src="${HOME}/emulation/libretro"
 
   local backup_name="saves-$(date --utc +'%s').tar.xz"

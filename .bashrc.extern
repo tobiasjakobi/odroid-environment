@@ -1,27 +1,2 @@
 source $HOME/.environment
 source $HOME/local/bin/retroarch_scripts
-
-function queueplow {
-  [[ -f "${1}" ]] || return
-
-  local sleep_interval="10s"
-
-  if [ -z "${nowait}" ]; then
-    if [ $(pgrep -c -f "plowdown") -ne 0 ]; then
-      echo "info: another download in progress, waiting..."
-      while [ $(pgrep -c -f "plowdown") -ne 0 ]; do
-        sleep "${sleep_interval}"
-      done
-    fi
-  fi
-
-  echo "info: starting download..."
-  cat /dev/null > /var/state/plow_stop
-  cat "${1}" | while read url; do
-    plowdown --no-overwrite --captchaprogram="$HOME/local/tesseract/captcha_solve.sh" "${url}"
-
-    if [ -n "$(cat /var/state/plow_stop 2> /dev/null)" ]; then
-      break
-    fi
-  done
-}

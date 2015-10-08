@@ -6,6 +6,3 @@ export PULSE_SINK="usb_dddac"
 if [ -z "${DISPLAY}" ]; then
   export DISPLAY=":0.0"
 fi
-
-# xbmc audio engine {SOFT,PULSE,ACTIVE}
-export AE_ENGINE=ACTIVE

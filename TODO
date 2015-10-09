@@ -1,0 +1,35 @@
+Gentoo Mali/X11 overlay (Wiki):
+https://github.com/ssvb/gentoo-overlay-mali-x11/wiki
+
+Tizen ARM:
+https://review.tizen.org/git/?p=platform/kernel/linux-3.10.git;a=shortlog;h=refs/heads/tizen
+https://source.tizen.org/documentation/reference/flash-device#install-mali-ddk
+
+usb3503:
+implement signal boost over device tree property
+implement ocs (also over dt)
+
+Ask Hardkernel:
+correct: buck7 also goes to ldo10, 13 and 14, 16
+is p3v3 really input for buck8?
+
+usb3503 refclk rate on X2: 26000000
+
+ipp:
+- https://review.tizen.org/git/?p=platform/upstream/libdrm.git;a=commitdiff;h=52de1c57e2e6f3b2a1259478d5ae260ed4c5706e;hp=12528efc426d3f4b88fee165baf99f4a9ddf264b#
+
+g2d/kernel:
+- add 'noreset' to drm_exynos_g2d_set_cmdlist
+- check performance if multiple cmdlists are processed together
+- constify some pointers, e.g. the g2d_image one in g2d_solid_fill
+- implement g2d_clear_multi in libdrm (needs noreset operation)
+
+retroarch/g2d:
+- copy from G2D_COLOR_FMT_A8 to G2D_COLOR_FMT_ARGB8888
+  and check if this only copies the alpha information
+- check if one can extend alpha with a rop3 (this doesn't
+  touch the alpha channel according to the user manual)
+
+kernel:
+- suspend not working (usb3503 / smsc95xx issue)
+- fb modifiers (https://tango.freedesktop.org/patch/42205/)

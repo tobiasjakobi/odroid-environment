@@ -12,6 +12,5 @@ fi
 echo -n 1 > /var/state/login
 
 case $1 in
-  xbmc ) exec $HOME/local/bin/xbmc ;;
   * )    exec /usr/bin/xterm ;;
 esac

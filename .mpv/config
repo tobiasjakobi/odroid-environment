@@ -1,4 +1,5 @@
 #ao = alsa:device=[hw:AureonUSB,0]
 ao = alsa:device=[hw:Max89090,0]
-vo = xv
+vo = exynos
+framedrop = no
 cache = 2048

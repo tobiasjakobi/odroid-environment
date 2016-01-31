@@ -1,12 +1,11 @@
 function rarch_remote {
-  local host="localhost"
-  local port="55355"
+  local pipe="${HOME}/local/retroarch.pipe"
 
   if [ $(pgrep -c retroarch) -eq 0 ]; then
     return
   fi
 
-  echo "${1}" | nc -q 1 -u "${host}" "${port}"
+  echo "${1}" > "${pipe}"
 }
 
 function rarch_backup_saves {

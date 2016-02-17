@@ -24,12 +24,5 @@ g2d/kernel:
 - constify some pointers, e.g. the g2d_image one in g2d_solid_fill
 - implement g2d_clear_multi in libdrm (needs noreset operation)
 
-retroarch/g2d:
-- copy from G2D_COLOR_FMT_A8 to G2D_COLOR_FMT_ARGB8888
-  and check if this only copies the alpha information
-- check if one can extend alpha with a rop3 (this doesn't
-  touch the alpha channel according to the user manual)
-
 kernel:
 - suspend not working (usb3503 / smsc95xx issue)
-- fb modifiers (https://tango.freedesktop.org/patch/42205/)

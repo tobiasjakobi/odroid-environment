@@ -1,2 +1,103 @@
-source $HOME/.environment
-source $HOME/local/bin/retroarch_scripts
+function uploadable {
+  while read line; do
+    sleep $((30 + $RANDOM % 15)) && plowdown --run-before=$HOME/local/plowhelp.sh "$line"
+    if [ $? -ne 0 ]; then
+      echo "$line" >> /tmp/plowdown-uploadable.list.failed
+    else
+      echo "$line" >> /tmp/plowdown-uploadable.list.done
+    fi
+  done
+}
+
+function pwk {
+  curl -s "${1}" | git am
+}
+
+function weston_kill {
+  pkill -x weston
+}
+
+function sensors {
+  local node="/sys/class/thermal/thermal_zone0"
+
+  if [ -e $node ]; then
+    local type=$(cat $node/type)
+    local temp=$(cat $node/temp)
+    local degree=$(echo "scale=2; ${temp} / 1000" | bc)
+
+    echo "${type}: ${degree} degree (celsius)"
+  fi
+}
+
+function kmake {
+  local numthreads=5
+
+  if [ -n "${1}" ]; then
+    make "${1}"
+  fi
+
+  make -j $numthreads
+}
+
+function exynos_test {
+  local modetest="${HOME}"/sourcecode/video/drm/tests/modetest/modetest
+
+  local retroarch="${HOME}"/local/bin/retroarch # "${HOME}"/sourcecode/emu/rarch/RetroArch/retroarch
+  local libpath="${HOME}"/sourcecode/video/drm/exynos/.libs:"${HOME}"/local/lib # "${HOME}"/local/lib
+
+  local config content isretro usegdb
+
+  isretro=0
+  usegdb=0
+
+  case "${1}" in
+    "--vp" )
+      $modetest -M exynos -s 23@21:1920x1080@AR24 -P 21:640x480+128+128@NV12 -P 21:640x480+1024+128@RG16 ;;
+
+    "--drm" )
+      $modetest -M exynos -s 23@21:1920x1080@XR24 -P 21:640x480+1024+128@RG16 ;;
+
+    "--retro" )
+      isretro=1 ;;
+
+    * )
+      echo "Usage: ${FUNCNAME} --vp|--drm|--retro"
+      return 1
+  esac
+
+  [[ $isretro -ne 1 ]] && return 0
+
+  while true; do
+    shift
+
+    [[ -z "${1}" ]] && break
+
+    case "${1}" in
+      "--psx" )
+        config="${HOME}"/local/pcsx.libretro
+        content="${HOME}"/emulation/psx/cdimages/Silent.Hill.US.NTSC.iso ;;
+
+      "--snes" )
+        config="${HOME}"/local/snes9x.libretro
+        content="${HOME}"/emulation/snes/roms/"Seiken Densetsu 3 (English) (Translated).sfc" ;;
+
+      "--gdb" )
+        usegdb=1 ;;
+
+      * )
+        echo "Usage: ${FUNCNAME} --retro --psx|--snes [--gdb]"
+        return 2
+    esac
+  done
+
+  if [[ -z "${config}" ]] || [[ -z "${content}" ]]; then
+    echo "error: missing config or content for RetroArch test"
+    return 3
+  fi
+
+  if [ $usegdb -eq 1 ]; then
+    LD_LIBRARY_PATH=$libpath gdb --args "${retroarch}" -v -c "${config}" "${content}"
+  else
+    LD_LIBRARY_PATH=$libpath "${retroarch}" -v -c "${config}" "${content}"
+  fi
+}

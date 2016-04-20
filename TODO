@@ -19,10 +19,19 @@ ipp:
 - https://review.tizen.org/git/?p=platform/upstream/libdrm.git;a=commitdiff;h=52de1c57e2e6f3b2a1259478d5ae260ed4c5706e;hp=12528efc426d3f4b88fee165baf99f4a9ddf264b#
 
 g2d/kernel:
-- add 'noreset' to drm_exynos_g2d_set_cmdlist
 - check performance if multiple cmdlists are processed together
 - constify some pointers, e.g. the g2d_image one in g2d_solid_fill
-- implement g2d_clear_multi in libdrm (needs noreset operation)
+- implement g2d_clear_multi in libdrm
+- need more checks for formats which require plane2 buffers
+- split g2d_add_cmd into base and non-base version (libdrm) [put check in assert]
+- need to make sure that a non-zero rectangle is set (the engine stops on null-rects)
 
 kernel:
 - suspend not working (usb3503 / smsc95xx issue)
+
+userptr ideas:
+- use pgprot_noncached to remove caching for userspace allocated memory
+- http://stackoverflow.com/questions/23248444/enabling-write-combining-io-access-in-userspace
+- http://stackoverflow.com/questions/9890728/how-would-one-prevent-mmap-from-caching-values
+- https://www.kernel.org/doc/htmldocs/kernel-api/API-remap-pfn-range.html
+- http://stackoverflow.com/questions/5539375/linux-kernel-device-driver-to-dma-from-a-device-into-user-space-memory

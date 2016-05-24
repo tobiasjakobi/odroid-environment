@@ -21,10 +21,7 @@ ipp:
 g2d/kernel:
 - check performance if multiple cmdlists are processed together
 - constify some pointers, e.g. the g2d_image one in g2d_solid_fill
-- implement g2d_clear_multi in libdrm
 - need more checks for formats which require plane2 buffers
-- split g2d_add_cmd into base and non-base version (libdrm) [put check in assert]
-- need to make sure that a non-zero rectangle is set (the engine stops on null-rects)
 
 kernel:
 - suspend not working (usb3503 / smsc95xx issue)

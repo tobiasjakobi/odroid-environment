@@ -1,0 +1,9 @@
+g2d/kernel:
+- check performance if multiple cmdlists are processed together
+- constify some pointers, e.g. the g2d_image one in g2d_solid_fill
+- dst select reg has some restrictions concerning scaling + YCbCr
+- g2d_close() should wait until the engine is idle
+- queue_work() to g2d reset
+- implement infinite loop test to check if reset works
+- reimplement userptr support using code from:
+  https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/etnaviv/etnaviv_gem.c

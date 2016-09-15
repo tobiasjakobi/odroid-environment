@@ -18,11 +18,6 @@ usb3503 refclk rate on X2: 26000000
 ipp:
 - https://review.tizen.org/git/?p=platform/upstream/libdrm.git;a=commitdiff;h=52de1c57e2e6f3b2a1259478d5ae260ed4c5706e;hp=12528efc426d3f4b88fee165baf99f4a9ddf264b#
 
-g2d/kernel:
-- check performance if multiple cmdlists are processed together
-- constify some pointers, e.g. the g2d_image one in g2d_solid_fill
-- need more checks for formats which require plane2 buffers
-
 kernel:
 - suspend not working (usb3503 / smsc95xx issue)
 

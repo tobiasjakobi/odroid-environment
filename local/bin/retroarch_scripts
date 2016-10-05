@@ -69,6 +69,22 @@ function rarch_check_gamepad {
   fi
 }
 
+function rarch_check_display {
+  local drm_node="/sys/class/drm/card0-HDMI-A-1/status"
+  local status
+
+  if [ ! -e "${drm_node}" ]; then
+    echo "error: DRM device not available"
+    return 1
+  fi
+
+  status=$(cat "${drm_node}")
+  if [ "${status}" != "connected" ]; then
+    echo "error: HDMI is not connected"
+    return 2
+  fi
+}
+
 function rarch_select_content {
   local snes_rom_path="${HOME}/emulation/snes/roms"
   local snes_def_rom="Donkey Kong Country 2 - Diddy's Kong Quest (U).sfc"

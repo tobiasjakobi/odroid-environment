@@ -89,7 +89,7 @@ function rarch_select_content {
   local snes_rom_path="${HOME}/emulation/snes/roms"
   local snes_def_rom="Donkey Kong Country 2 - Diddy's Kong Quest (U).sfc"
   local psx_iso_path="${HOME}/emulation/psx/cdimages"
-  local psx_def_iso="Breath.of.Fire.III.US.NTSC.img"
+  local psx_def_iso="Grandia.US.NTSC.Disc1.img"
 
   case "${1}" in
     "psx" )  echo "${psx_iso_path}/${psx_def_iso}" ;;

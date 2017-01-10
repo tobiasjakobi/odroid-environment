@@ -1,10 +1,18 @@
-function uploadable {
+# Read bigfile_to URLs from stdin and download with CURL.
+function bigfile {
+  local wait
+
   while read line; do
-    sleep $((30 + $RANDOM % 15)) && plowdown --run-before=$HOME/local/plowhelp.sh "$line"
+    # sleep random amount of time (between 0 and 30 seconds)
+    wait=$(($RANDOM % 30))
+    sleep "${wait}s"
+
+    curl --continue-at - --remote-name --location --cookie "${HOME}"/local/bigfile.cookie "${line}"
+
     if [ $? -ne 0 ]; then
-      echo "$line" >> /tmp/plowdown-uploadable.list.failed
+      echo "${line}" >> /tmp/curl.bigfile-failed.list
     else
-      echo "$line" >> /tmp/plowdown-uploadable.list.done
+      echo "${line}" >> /tmp/curl.bigfile-done.list
     fi
   done
 }

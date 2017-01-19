@@ -7,7 +7,7 @@
 
 int i_fd = -1, i_w = -1;
 pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t cnd = PTHREAD_COND_INITIALIZER;
+pthread_cond_t cnd;
 
 void* threadfunc(void *arg) {
   struct pollfd pf = {
@@ -39,27 +39,40 @@ void* threadfunc(void *arg) {
 
 int main(int argc, char* argv[]) {
   struct timespec tw;
+  pthread_condattr_t attr;
   pthread_t thread;
   int ret;
 
   if (argc < 2)
     return 1;
 
+  pthread_condattr_init(&attr);
+  pthread_condattr_setclock(&attr, CLOCK_MONOTONIC);
+
+  ret = pthread_cond_init(&cnd, &attr);
+  pthread_condattr_destroy(&attr);
+
+  if (ret != 0)
+    return 2;
+
   i_fd = inotify_init();
   if (i_fd < 0)
-    return 2;
+    return 3;
 
   i_w = inotify_add_watch(i_fd, argv[1], IN_MODIFY);
   if (i_w < 0) {
     close(i_fd);
-    return 3;
+    return 4;
   }
 
   ret = pthread_create(&thread, NULL, threadfunc, NULL);
   if (ret < 0)
     goto out;
 
-  gettimeofday(&tw, NULL);
+  ret = clock_gettime(CLOCK_MONOTONIC, &tw);
+  if (ret < 0)
+    return 5;
+
   tw.tv_sec += 3 * 60;
 
   ret = pthread_cond_timedwait(&cnd, &mtx, &tw);

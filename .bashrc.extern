@@ -83,7 +83,7 @@ function exynos_test {
     case "${1}" in
       "--psx" )
         config="${HOME}"/local/pcsx.libretro
-        content="${HOME}"/emulation/psx/cdimages/Silent.Hill.US.NTSC.iso ;;
+        content="${HOME}"/emulation/psx/cdimages/Parasite.Eve.US.NTSC.Disc1.img ;;
 
       "--snes" )
         config="${HOME}"/local/snes9x.libretro

@@ -5,9 +5,11 @@
 #include <string.h>
 #include <time.h>
 
+#if !defined(NV12_LIB)
 extern void nv12mt_to_yuv420m_neon(void *y_out,
 	void *cb_out, void *cr_out, const void *y_in,
 	const void *cbcr_in, unsigned width, unsigned height);
+#endif
 
 enum nv12mt_constants {
 	nv12mt_tile_width = 64,
@@ -127,6 +129,18 @@ convert_nv12_nv12mt(uint8_t* tiled[2], uint8_t* untiled[2],
 	return 0;
 }
 
+#if defined(NV12_LIB)
+int nv12_to_nv12mt(const uint8_t* src[2], uint8_t* dst[2],
+					unsigned width, unsigned height)
+{
+	uint8_t* untiled[2] = {(uint8_t*)src[0], (uint8_t*)src[1]};
+	uint8_t* tiled[2] = {dst[0], dst[1]};
+
+	return convert_nv12_nv12mt(tiled, untiled, width, height, false);
+}
+#endif
+
+#if !defined(NV12_LIB)
 static int
 compare_buffers(const uint8_t* buf1[2], const uint8_t* buf2[2],
 				unsigned width, unsigned height, bool luma,
@@ -261,3 +275,4 @@ int main(int argc, char* argv[])
 
 	return ret;
 }
+#endif

@@ -47,6 +47,14 @@ function kmake {
   make -j $numthreads
 }
 
+# Run a git fsck on all repositories in the home directory.
+function git_fsck_all {
+  find "${HOME}" -type d -name .git | while read gitdir; do
+    echo "info: git fsck in \"${gitdir}\""
+    GIT_DIR="${gitdir}" git fsck
+  done
+}
+
 function exynos_test {
   local modetest="${HOME}"/sourcecode/video/drm/tests/modetest/modetest
 

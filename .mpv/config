@@ -1,5 +1,7 @@
-#ao = alsa:device=[hw:AureonUSB,0]
-ao = alsa:device=[hw:Max89090,0]
+#audio-device = alsa/hw:AureonUSB,0
+audio-device = alsa/hw:Max89090,0
+audio-channels = stereo
+audio-format = s16
 vo = exynos
 framedrop = no
 cache = 2048

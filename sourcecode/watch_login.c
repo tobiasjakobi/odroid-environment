@@ -5,17 +5,23 @@
 #include <sys/inotify.h>
 #include <sys/time.h>
 
-int i_fd = -1, i_w = -1;
-pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t cnd;
+#include <stdbool.h>
 
-void* threadfunc(void *arg) {
+
+static int i_fd = -1;
+static int i_w = -1;
+static pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t cnd;
+
+
+static void* threadfunc(void *arg)
+{
   struct pollfd pf = {
     .fd = i_fd,
     .events = POLLIN
   };
 
-  while (1) {
+  while (true) {
     pf.revents = 0;
 
     if (poll(&pf, 1, 1000) < 0)
@@ -37,7 +43,9 @@ void* threadfunc(void *arg) {
   pthread_exit(0);
 }
 
-int main(int argc, char* argv[]) {
+
+int main(int argc, char *argv[])
+{
   struct timespec tw;
   pthread_condattr_t attr;
   pthread_t thread;

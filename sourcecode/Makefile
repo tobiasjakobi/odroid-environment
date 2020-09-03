@@ -1,5 +1,5 @@
 compiler := gcc
-cflags   := -march=armv7-a -mcpu=cortex-a9 -mfpu=neon -mfloat-abi=hard
+cflags   := -mcpu=cortex-a9 -mfpu=neon -mfloat-abi=hard
 ldflags  := 
 destdir  := /usr/local
 
@@ -24,7 +24,7 @@ ifneq (,$(DESTDIR))
 destdir := $(DESTDIR)
 endif
 
-objects := neon_test thread_test test_memcmp
+objects := neon_test reboot thread_test test_memcmp watch_login
 
 all: $(objects)
 
@@ -34,11 +34,20 @@ all: $(objects)
 %.o: %.c
 	$(compiler) -c -o $@ $(cflags) $<
 
-thread_test: thread_test.o; $(compiler) -o $@ $^ $(ldflags) -lpthread
+neon_test: neon_test.o put_glyph_rgba4444_neon.o
+	$(compiler) -o $@ $^ $(ldflags)
 
-neon_test: neon_test.o put_glyph_rgba4444_neon.o; $(compiler) -o $@ $^ $(ldflags)
+reboot:
+	$(compiler) -o $@ $(cflags) reboot.c
 
-test_memcmp: test_memcmp.o memcmp-neon.o; $(compiler) -o $@ $^ $(ldflags)
+thread_test: thread_test.o
+	$(compiler) -o $@ $^ $(ldflags) -lpthread
+
+test_memcmp: test_memcmp.o memcmp-neon.o
+	$(compiler) -o $@ $^ $(ldflags)
+
+watch_login: watch_login.o
+	$(compiler) -o $@ $^ $(ldflags) -pthread
 
 clean:
 	rm -f *.o
@@ -46,4 +55,3 @@ clean:
 
 strip:
 	strip -s $(objects)
-

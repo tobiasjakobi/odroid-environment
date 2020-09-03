@@ -1,5 +1,5 @@
 compiler := gcc
-cflags   := -march=armv7-a -mcpu=cortex-a9 -mfpu=neon -mfloat-abi=hard
+cflags   := -mcpu=cortex-a9 -mfpu=neon -mfloat-abi=hard
 ldflags  :=
 destdir  := /usr/local
 
@@ -37,9 +37,11 @@ all: $(objects)
 nv12_lib.o: nv12_test.c
 	$(compiler) -std=c99 -fPIC -DNV12_LIB -c -o $@ $(cflags) $<
 
-nv12_test: nv12_test.o nv12mt_to_yuv420m.neon.o; $(compiler) -o $@ $^ $(ldflags)
+nv12_test: nv12_test.o nv12mt_to_yuv420m.neon.o
+	$(compiler) -o $@ $^ $(ldflags)
 
-libnv12mt.so: nv12_lib.o; $(compiler) -shared -o $@ $^ $(ldflags)
+libnv12mt.so: nv12_lib.o
+	$(compiler) -shared -o $@ $^ $(ldflags)
 
 clean:
 	rm -f *.o

@@ -1,42 +1,5 @@
-# Read filehoster URLs from stdin and download with CURL.
-function filehoster_dl {
-  local wait
-  local hoster
-
-  case "${1}" in
-    "--bigfile" )
-      hoster="bigfile" ;;
-
-    "--datafile" )
-      hoster="datafile" ;;
-
-    * )
-      echo "error: unknown filehoster selected"
-      echo "Usage: ${FUNCNAME} --bigfile|--datafile"
-      return
-  esac
-
-  while read line; do
-    # sleep random amount of time (between 0 and 30 seconds)
-    wait=$(($RANDOM % 30))
-    sleep "${wait}s"
-
-    curl --continue-at - --remote-name --location --cookie "${HOME}"/local/${hoster}.cookie "${line}"
-
-    if [ $? -ne 0 ]; then
-      echo "${line}" >> /tmp/curl.${hoster}-failed.list
-    else
-      echo "${line}" >> /tmp/curl.${hoster}-done.list
-    fi
-  done
-}
-
 function pwk {
-  curl -s "${1}" | git am
-}
-
-function weston_kill {
-  pkill -x weston
+  curl -s "${1}" | git am -3
 }
 
 function sensors {

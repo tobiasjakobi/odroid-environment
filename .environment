@@ -1,8 +1,6 @@
-# pulseaudio settings
+# PulseAudio settings
 export PULSE_SERVER="tcp:audioserver"
 export PULSE_SINK="usb_dddac"
 
-# when using X
-if [ -z "${DISPLAY}" ]; then
-  export DISPLAY=":0.0"
-fi
+# Bash settings
+export QUOTING_STYLE=literal

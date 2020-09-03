@@ -1,0 +1,24 @@
+## RetroArch config for pcsx-rearmed
+
+#### Main
+#include "/home/liquid/emulation/libretro/main.conf"
+
+libretro_path = "/home/liquid/sourcecode/emu/rarch/pcsx_rearmed/pcsx_rearmed_libretro.so"
+core_options_path = "/home/liquid/emulation/libretro/pcsx.environment"
+rgui_browser_directory = "/home/liquid/emulation/psx"
+
+#### Video
+#include "/home/liquid/emulation/libretro/video-debug.conf"
+
+#### Audio
+#include "/home/liquid/emulation/libretro/audio.conf"
+
+### The native PSX sample rate is 44.1kHz
+### Don't apply any resampling at all
+audio_out_rate = 44100
+
+#### Input
+#include "/home/liquid/emulation/libretro/input.conf"
+
+#### Misc
+#include "/home/liquid/emulation/libretro/misc.conf"

@@ -1,6 +1,3 @@
-Gentoo Mali/X11 overlay (Wiki):
-https://github.com/ssvb/gentoo-overlay-mali-x11/wiki
-
 Tizen ARM:
 https://review.tizen.org/git/?p=platform/kernel/linux-3.10.git;a=shortlog;h=refs/heads/tizen
 https://source.tizen.org/documentation/reference/flash-device#install-mali-ddk
